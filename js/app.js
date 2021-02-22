@@ -103,10 +103,48 @@ function handleClick(event) {
 function handleButtonClick(event) {
   if(totalClicks === allowedClicks) {
     renderResults();
+    createChart(); // ### chartjs
   }
 }
-
 renderProducts();
 
 imagesSection.addEventListener('click', handleClick);
 resultsButton.addEventListener('click', handleButtonClick);
+
+
+// ### chartjs
+
+function createChart() {
+  const ctx = document.getElementById('myChart').getContext('2d');
+
+  const productName = [];
+  const productVotes = [];
+  const productViews = [];
+  for (let i = 0; i < Product.all.length; i++) {
+    productName.push(Product.all[i].name);
+    productVotes.push(Product.all[i].votes);
+    productViews.push(Product.all[i].views);
+  }
+  console.log('Votes', productVotes);
+  console.log('Views', productViews);
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productName,
+      datasets: [{
+          label: '# of votes:',
+          backgroundColor: 'rgb(100, 125, 50)',
+          data: productVotes,
+        },
+        {
+          label: '# of views:',
+          backgroundColor: 'rgb(220, 125, 50)',
+          data: productViews,
+        }
+      ],
+    },
+    options: {
+    },
+  });
+}
+

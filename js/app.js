@@ -18,26 +18,34 @@ function Product(name, fileExtension) {
   Product.all.push(this);
 }
 
-new Product('bag', 'jpg');
-new Product('banana', 'jpg');
-new Product('bathroom', 'jpg');
-new Product('boots', 'jpg');
-new Product('breakfast', 'jpg');
-new Product('bubblegum', 'jpg');
-new Product('chair', 'jpg');
-new Product('cthulhu', 'jpg');
-new Product('dog-duck', 'jpg');
-new Product('dragon', 'jpg');
-new Product('pen', 'jpg');
-new Product('pet-sweep', 'jpg');
-new Product('scissors', 'jpg');
-new Product('shark', 'jpg');
-new Product('sweep', 'png');
-new Product('tauntaun', 'jpg');
-new Product('unicorn', 'jpg');
-new Product('usb', 'gif');
-new Product('water-can', 'jpg');
-new Product('wine-glass', 'jpg');
+let retrieveProducts = localStorage.getItem('products');
+
+if (retrieveProducts) {
+  let parsedProducts = JSON.parse(retrieveProducts);
+  Product.all = parsedProducts;
+} else {
+  new Product('bag', 'jpg');
+  new Product('banana', 'jpg');
+  new Product('bathroom', 'jpg');
+  new Product('boots', 'jpg');
+  new Product('breakfast', 'jpg');
+  new Product('bubblegum', 'jpg');
+  new Product('chair', 'jpg');
+  new Product('cthulhu', 'jpg');
+  new Product('dog-duck', 'jpg');
+  new Product('dragon', 'jpg');
+  new Product('pen', 'jpg');
+  new Product('pet-sweep', 'jpg');
+  new Product('scissors', 'jpg');
+  new Product('shark', 'jpg');
+  new Product('sweep', 'png');
+  new Product('tauntaun', 'jpg');
+  new Product('unicorn', 'jpg');
+  new Product('usb', 'gif');
+  new Product('water-can', 'jpg');
+  new Product('wine-glass', 'jpg');
+
+}
 
 function getRandomIndex() {
   return Math.floor(Math.random() * Product.all.length);
@@ -100,11 +108,14 @@ function handleClick(event) {
   }
 }
 
-function handleButtonClick(event) {
+function handleButtonClick() {
   if(totalClicks === allowedClicks) {
     renderResults();
     createChart(); // ### chartjs
   }
+  let stringifiedProducts = JSON.stringify(Product.all);
+
+  localStorage.setItem('products', stringifiedProducts);
 }
 renderProducts();
 
@@ -127,20 +138,20 @@ function createChart() {
   }
   console.log('Votes', productVotes);
   console.log('Views', productViews);
-  new Chart(ctx, {
+  new Chart (ctx, {
     type: 'bar',
     data: {
       labels: productName,
       datasets: [{
-          label: '# of votes:',
-          backgroundColor: 'rgb(100, 125, 50)',
-          data: productVotes,
-        },
-        {
-          label: '# of views:',
-          backgroundColor: 'rgb(220, 125, 50)',
-          data: productViews,
-        }
+        label: '# of votes:',
+        backgroundColor: 'rgb(100, 125, 50)',
+        data: productVotes,
+      },
+      {
+        label: '# of views:',
+        backgroundColor: 'rgb(220, 125, 50)',
+        data: productViews,
+      }
       ],
     },
     options: {
